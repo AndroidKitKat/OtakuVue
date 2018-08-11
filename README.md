@@ -1,4 +1,4 @@
-# default-boilerplate
+# boilerplate2
 
 ## Project setup
 ```

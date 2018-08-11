@@ -1,10 +1,11 @@
 module.exports = {
   css: {
+    sourceMap: true,
     loaderOptions: {
       sass: {
-        data: '@import "src/assets/sass/style.scss";',
-      },
-    },
+        data: '@import "src/sass/style.scss";'
+      }
+    }
   },
   pluginOptions: {
     stylelint: {
@@ -13,5 +14,5 @@ module.exports = {
       formatter: () => {}
     },
     lintStyleOnBuild: false
-  },
-}
+  }
+};

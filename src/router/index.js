@@ -1,9 +1,8 @@
-// Import Dependencies
 import Vue from 'vue'
 import Router from 'vue-router'
 
 // Import routes
-import AppRoutes from '@/router/routes/AppRoutes'
+import AppRoutes from '@/router/appRoutes'
 
 Vue.use(Router)
 
@@ -11,6 +10,7 @@ Vue.use(Router)
 const wildcardRedirect = [{ path: '*', redirect: '/' }]
 
 export default new Router({
-  // Concatenate all the routes.
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes: [...wildcardRedirect, ...AppRoutes],
 })
