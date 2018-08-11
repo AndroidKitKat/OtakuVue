@@ -1,13 +1,15 @@
-.DS_Store
-node_modules
+# Directories
+/node_modules
 /dist
-
+/dev
 /tests/e2e/videos/
 /tests/e2e/screenshots/
 
-# local env files
-.env.local
-.env.*.local
+# Sytem Files
+.DS_Store
+
+# env files
+.env*
 
 # Log files
 npm-debug.log*
