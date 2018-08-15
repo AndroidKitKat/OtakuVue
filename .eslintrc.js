@@ -27,7 +27,7 @@ module.exports = {
     'object-property-newline': [
       'error',
       {
-        'allowAllPropertiesOnSameLine': true
+        'allowAllPropertiesOnSameLine': false
       }
     ],
     'max-len': [
