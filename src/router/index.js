@@ -7,7 +7,12 @@ import AppRoutes from '@/router/appRoutes'
 Vue.use(Router)
 
 // Wildcard redirect to base URL for any undefined URLs.
-const wildcardRedirect = [{ path: '*', redirect: '/' }]
+const wildcardRedirect = [
+  {
+    path: '*',
+    redirect: '/',
+  },
+]
 
 export default new Router({
   mode: 'history',
