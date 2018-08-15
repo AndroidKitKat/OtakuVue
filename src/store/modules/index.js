@@ -14,13 +14,9 @@ requireModule.keys().forEach(fileName => {
 
   // Get the module path as an array
   const modulePath = fileName
-    // Remove the "./" from the beginning
     .replace(/^\.\//, '')
-    // Remove the file extension from the end
     .replace(/\.\w+$/, '')
-    // Split nested modules into an array path
     .split(/\//)
-    // camelCase all module namespaces and names
     .map(camelCase)
 
   // Get the modules object for the current path
@@ -38,7 +34,10 @@ requireModule.keys().forEach(fileName => {
     if (path.length === 1) return subtree
 
     const namespace = path.shift()
-    subtree.modules[namespace] = { modules: {}, ...subtree.modules[namespace] }
+    subtree.modules[namespace] = {
+      modules: {},
+      ...subtree.modules[namespace],
+    }
     return getNamespace(subtree.modules[namespace], path)
   }
 })
