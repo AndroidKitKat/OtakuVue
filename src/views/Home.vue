@@ -1,18 +1,55 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <Layout>
+    <!-- header -->
+    <Header slot="header">
+    </Header>
+    <!-- /header | main-->
+    <Main slot="main">
+    </Main>
+    <!-- /main | footer -->
+    <Footer slot="footer">
+    </Footer>
+    <!-- /footer -->
+  </Layout>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Layout from './layouts/MainLayout'
+import Header from './layouts/Header'
+import Main from './layouts/Main'
+import Footer from './layouts/Footer'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld,
+    Layout,
+    Header,
+    Main,
+    Footer,
   },
+  props: {},
+  data() {
+    return {
+      // Add to Header component
+      // :attr="headerAttrs"
+      headerAttrs: {
+        id: '',
+        class: '',
+        attrs: '',
+      },
+    }
+  },
+  methods: {},
+  computed: {},
+  watch: {},
+  // Lifecycle Hooks
+  beforeCreate() {},
+  created() {},
+  beforeMount() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {},
+  beforeDestroy() {},
+  destroyed() {},
 }
 </script>
