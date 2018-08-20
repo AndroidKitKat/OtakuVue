@@ -1,5 +1,5 @@
 <template>
-  <div class="copywrite">{{ siteName() }} &copy; {{ currentYear() }}</div>
+  <div id="copyright" class="copyright">{{ siteName() }} &copy; {{ currentYear() }}</div>
 </template>
 
 <script>
