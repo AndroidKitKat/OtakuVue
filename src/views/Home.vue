@@ -1,32 +1,13 @@
 <template>
-  <Layout>
-    <!-- header -->
-    <Header slot="header">
-    </Header>
-    <!-- /header | main-->
-    <Main slot="main">
-    </Main>
-    <!-- /main | footer -->
-    <Footer slot="footer">
-    </Footer>
-    <!-- /footer -->
-  </Layout>
+  <div>
+    <p>Home</p>
+  </div>
 </template>
 
 <script>
-import Layout from './layouts/MainLayout'
-import Header from './layouts/Header'
-import Main from './layouts/Main'
-import Footer from './layouts/Footer'
-
 export default {
   name: 'home',
-  components: {
-    Layout,
-    Header,
-    Main,
-    Footer,
-  },
+  components: {},
   props: {},
   data() {
     return {
