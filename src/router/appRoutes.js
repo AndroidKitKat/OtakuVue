@@ -1,5 +1,5 @@
 // Import the views for the routes.
-import Home from '@/views/Home'
+import Home from '@views/Home'
 
 // Define the routes.
 export default [
