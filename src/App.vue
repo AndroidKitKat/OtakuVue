@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import Layout from '@/layouts/MainLayout'
-import Header from '@/layouts/Header'
-import Main from '@/layouts/Main'
-import Footer from '@/layouts/Footer'
-import Nav from '@/components/MainNav'
-import Copyright from '@/components/Copyright'
+import Layout from '@layouts/MainLayout'
+import Header from '@layouts/Header'
+import Main from '@layouts/Main'
+import Footer from '@layouts/Footer'
+import Nav from '@components/MainNav'
+import Copyright from '@components/Copyright'
 
 export default {
   name: 'app',

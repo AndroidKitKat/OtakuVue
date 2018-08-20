@@ -21,6 +21,9 @@ const config = {
   },
   configureWebpack: {
     name: process.env.VUE_APP_TITLE,
+    resolve: {
+      alias: require('./aliases.config').webpack,
+    },
     plugins: [],
   },
 }

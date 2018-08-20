@@ -1,3 +1,5 @@
+import './../aliases.config'
+
 class TestHelpers {
   constructor(wrapper, expect) {
     this.wrapper = wrapper
