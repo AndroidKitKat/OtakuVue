@@ -1,4 +1,7 @@
-/dist/
 /node_modules/
 /tests/unit/coverage/
 /public/
+/dist/
+/dev/
+__tests__
+__mocks__
