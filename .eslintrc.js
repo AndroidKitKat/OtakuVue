@@ -3,6 +3,9 @@ module.exports = {
   env: {
     node: true
   },
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
   'extends': [
     'plugin:vue/essential',
     'plugin:prettier/recommended',
@@ -42,8 +45,5 @@ module.exports = {
         'ignoreRegExpLiterals': true
       }
     ]
-  },
-  parserOptions: {
-    parser: 'babel-eslint'
   }
 }
