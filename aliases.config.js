@@ -13,7 +13,7 @@ const aliases = {
   '@assets': 'src/assets',
   '@utils': 'src/utils',
   '@store': 'src/store',
-  '@sass': 'src/sass/index.scss',
+  '@sass': 'src/sass',
 }
 
 module.exports = {
