@@ -1,52 +1,41 @@
-import Vuex from 'vuex'
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Main from '@layouts/Main'
 import TestHelpers from '@src/../tests/helpers'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
 describe('Main.vue', () => {
-  let wrapper
-  let store
-  // eslint-disable-next-line
-  let h
-  beforeEach(() => {
-    store = new Vuex.Store({})
-    wrapper = shallowMount(Main, {
-      localVue,
-      store,
-      slots: {
-        default: '<div class="default"></div>',
-      },
-      mocks: {},
-      stubs: {},
-    })
-    h = new TestHelpers(wrapper, expect)
-  })
-
   it('Main component mounts without errors', () => {
+    const wrapper = shallowMount(Main)
     expect(wrapper.isVueInstance()).toBeTruthy()
   })
 
-  let classesSelectors = ['#main', '.main']
+  const classesSelectors = ['#main', '.main']
 
   classesSelectors.forEach(selector => {
     it(selector + ' has class set', () => {
+      const wrapper = shallowMount(Main)
+      const h = new TestHelpers(wrapper, expect)
       h.domHas(selector)
     })
   })
 
   classesSelectors.forEach(selector => {
     it('If ' + selector + ' has the role attribute', () => {
+      const wrapper = shallowMount(Main)
+      const h = new TestHelpers(wrapper, expect)
       h.hasAttribute(selector, 'role')
     })
   })
 
-  let slotSelectors = ['.default']
+  const slotSelectors = ['.default']
 
   slotSelectors.forEach(selector => {
     it('If slot is populated with an element with the selector ' + selector, () => {
+      const wrapper = shallowMount(Main, {
+        slots: {
+          default: '<div class="default"></div>',
+        },
+      })
+      const h = new TestHelpers(wrapper, expect)
       h.domHas(selector)
     })
   })
