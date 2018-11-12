@@ -7,7 +7,7 @@ const config = {
     sourceMap: true,
     loaderOptions: {
       sass: {
-        data: '@import "src/sass/style.scss";',
+        data: '@import "src/assets/sass/style.scss";',
       },
     },
   },

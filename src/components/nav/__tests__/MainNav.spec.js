@@ -1,6 +1,6 @@
 import VueRouter from 'vue-router'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import MainNav from '@components/MainNav'
+import MainNav from '@components/nav/MainNav'
 import TestHelpers from '@src/../tests/helpers'
 
 const localVue = createLocalVue()

@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import Copyright from '@components/Copyright'
+import Copyright from '@components/copywrite/Copyright'
 import TestHelpers from '@src/../tests/helpers'
 
 describe('Copyright.vue', () => {
