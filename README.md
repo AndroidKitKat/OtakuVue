@@ -1,4 +1,4 @@
-# Vue.js boilerplate
+# OtakuVue
 
 ## Project setup
 
