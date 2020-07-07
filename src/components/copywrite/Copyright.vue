@@ -1,5 +1,22 @@
 <template>
-  <div id="copyright" class="copyright">{{ siteName() }} &copy; {{ currentYear() }}</div>
+  <div class="row">
+    <hr />
+    <footer class="text-center">
+      <p class="text-muted">
+        <small>
+          Built using
+          <a href="https://vuejs.org">Vue.js</a>, <a href="https://code.visualstudio.com">VSCode</a>,
+          <a href="https://nodejs.org">Node.js</a>, and <a href="https://back4app.com">Parse</a>. Data from the
+          <a href="https://animenewsnetwork.com">Anime News Network</a>.
+          <br />
+          &copy;
+          {{ currentYear() }} <a href="https://github.com/AndroidKitKat">AndroidKitKat</a> and
+          <a href="https://github.com/ogallahu">ogallahu</a>.
+        </small>
+      </p>
+    </footer>
+  </div>
+  <!-- <div id="copyright" class="copyright">{{ siteName() }} &copy; {{ currentYear() }}</div> -->
 </template>
 
 <script>
@@ -31,3 +48,5 @@ export default {
   destroyed() {},
 }
 </script>
+
+<style></style>
