@@ -1,14 +1,25 @@
 <template>
   <div id="HomeService">
-    <h2>Shows on Watchlist</h2>
-    <div id="shows-container" v-if="watched.length > 0">
-      <div class="well well-sm" v-for="show in watched" :key="show.name" :id="show.gid">
-        <a :href="ann_url + show.anid" target="_blank">{{ show.name }}</a>
+    <h1 class="text-center my-3">Shows on Watchlist</h1>
+    <div class="px-5" id="shows-container" v-if="watched.length > 0">
+      <div class="card-deck">
+        <div class="card" style="max-width: 540px;" v-for="show in watched" :key="show.name" :data-id="show.gid">
+          <div class="row">
+            <div class="col-md-4">
+              <img src="" class="card-img" alt="" />
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ show.name }}</h5>
+                <p class="card-text">
+                  This text is limited to fourty eight characters.
+                </p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div id="empty-shows-container" v-else>
-      <h3>You have no shows on your watchlist!</h3>
-      <p>Go to the add tab and add some shows!</p>
     </div>
   </div>
 </template>

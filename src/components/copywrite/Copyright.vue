@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div>
     <hr />
     <footer class="text-center">
       <p class="text-muted">
@@ -9,7 +9,7 @@
           <a href="https://nodejs.org">Node.js</a>, and <a href="https://back4app.com">Parse</a>. Data from the
           <a href="https://animenewsnetwork.com">Anime News Network</a>.
           <br />
-          &copy;
+          &#xA9;
           {{ currentYear() }} <a href="https://github.com/AndroidKitKat">AndroidKitKat</a> and
           <a href="https://github.com/ogallahu">ogallahu</a>.
         </small>

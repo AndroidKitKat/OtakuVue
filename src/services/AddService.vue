@@ -5,7 +5,7 @@
       <input type="text" v-model="showName" />
       <button @click="searchShow">Search</button>
     </div>
-    <div class="well well-sm" v-if="validShow">
+    <div class="card bg-light card-body mb-3 card bg-faded p-1 mb-3" v-if="validShow">
       <a class="ani-name" :href="ann_url + show.anid" target="_blank">{{ show.name }}</a>
       <button type="button" class="btn btn-info" @click="addShow">Add</button>
     </div>
