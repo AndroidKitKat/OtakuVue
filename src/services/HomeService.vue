@@ -57,3 +57,10 @@ export default {
   destroyed() {},
 }
 </script>
+
+<style scoped>
+.shows-container .parent {
+  display: grid;
+  place-items: center;
+}
+</style>
