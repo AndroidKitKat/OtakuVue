@@ -1,24 +1,39 @@
 <template>
   <div id="HomeService">
     <h1 class="text-center my-3">Shows on Watchlist</h1>
-    <div class="px-5" id="shows-container" v-if="watched.length > 0">
-      <div class="card-deck">
-        <div class="card" style="max-width: 540px;" v-for="show in watched" :key="show.name" :data-id="show.gid">
-          <div class="row">
-            <div class="col-md-4">
-              <img src="" class="card-img" alt="" />
+    <div id="shows-container" v-if="watched.length > 0 && !loading">
+      <div class="col-md-8 mx-auto">
+        <div
+          class="card mb-2"
+          style="height:210px; justify-content: center;"
+          v-for="show in watched"
+          :key="show.name"
+          :data-id="show.gid"
+        >
+          <div class="row no-gutters">
+            <div class="pl-1">
+              <img
+                src="https://cdn.animenewsnetwork.com/thumbnails/fit200x200/encyc/A7222-236.jpg"
+                class="card-img anime-art"
+                alt=""
+              />
             </div>
-            <div class="col-md-8">
+            <div class="col-sm">
               <div class="card-body">
                 <h5 class="card-title">{{ show.name }}</h5>
                 <p class="card-text">
-                  This text is limited to fourty eight characters.
+                  We should limit this card-text to around 180 chars. But what if we add more? I think it'd be a good
+                  idea to maybe put an arrow by the show name when you hover.
                 </p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center" v-if="loading">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
       </div>
     </div>
   </div>
@@ -33,6 +48,7 @@ export default {
     return {
       watched: [],
       ann_url: 'https://www.animenewsnetwork.com/encyclopedia/anime.php?id=',
+      loading: true,
     }
   },
   methods: {
@@ -51,6 +67,7 @@ export default {
       })
       const shows = await response.json()
       this.watched = shows.results
+      this.loading = false
     },
   },
   computed: {},
@@ -70,8 +87,8 @@ export default {
 </script>
 
 <style scoped>
-.shows-container .parent {
-  display: grid;
-  place-items: center;
+.card-img {
+  object-fit: none;
+  object-position: center;
 }
 </style>

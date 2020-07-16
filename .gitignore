@@ -3,6 +3,9 @@
 /tests/e2e/videos/
 /tests/e2e/screenshots/
 
+# production
+/dist/
+
 # Sytem Files
 .DS_Store
 

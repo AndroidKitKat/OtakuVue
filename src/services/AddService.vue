@@ -1,12 +1,24 @@
 <template>
   <div id="AddService">
-    <h2>Add show</h2>
-    <div class="ani-input-div">
-      <input type="text" v-model="showName" />
-      <button @click="searchShow">Search</button>
+    <h2 class="text-center my-3">Add show</h2>
+    <div id="input-container" class="col-md-4 mx-auto">
+      <div class="input-group">
+        <input
+          v-model="showName"
+          type="text"
+          class="form-control"
+          placeholder="Search for a show..."
+          aria-label="Search for a show"
+          aria-describedby="show-input"
+        />
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" type="button" @click="searchShow">Search</button>
+        </div>
+      </div>
     </div>
     <div class="card bg-light card-body mb-3 card bg-faded p-1 mb-3" v-if="validShow">
       <a class="ani-name" :href="ann_url + show.anid" target="_blank">{{ show.name }}</a>
+      <p>{{ show.summary }}</p>
       <button type="button" class="btn btn-info" @click="addShow">Add</button>
     </div>
     <div class="well well-sm" v-else-if="validShow == false">
@@ -27,12 +39,14 @@ export default {
       show: {},
       validShow: false,
       showResult: '',
+      summaryReady: false,
     }
   },
   methods: {
     searchShow: async function() {
       // eslint-disable-next-line no-undef
-      var url = 'https://parseapi.back4app.com/classes/Titles?' + $.param({ where: { name: this.showName } })
+      var url = 'https://parseapi.back4app.com/classes/newTitles'
+      //var url = 'https://parseapi.back4app.com/classes/newTitles?' + $.param({ where: { name: this.showName } })
 
       const response = await fetch(url, {
         headers: {
@@ -45,6 +59,9 @@ export default {
       try {
         const data = await response.json()
         this.show = data.results[0]
+        console.log(data.results)
+        // i love csv
+        this.show.summary = this.show.summary.replace(/╘/g, ',')
         this.showResult = this.show.name
         this.validShow = true
       } catch {
@@ -105,27 +122,3 @@ export default {
   destroyed() {},
 }
 </script>
-
-<style>
-.ani-input-div {
-  padding-bottom: 10px;
-}
-.ani-name {
-  padding-right: 10px;
-}
-.well {
-  min-height: 54px;
-}
-</style>
-
-<style>
-.ani-input-div {
-  padding-bottom: 10px;
-}
-.ani-name {
-  padding-right: 10px;
-}
-.well {
-  min-height: 54px;
-}
-</style>
