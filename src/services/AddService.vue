@@ -18,7 +18,7 @@
     </div>
     <div class="card bg-light card-body mb-3 card bg-faded p-1 mb-3" v-if="validShow">
       <a class="ani-name" :href="ann_url + show.anid" target="_blank">{{ show.name }}</a>
-      <p>{{ show.summary }}</p>
+      <p>{{ show.summary.replace(/╘/g, ',') }}</p>
       <button type="button" class="btn btn-info" @click="addShow">Add</button>
     </div>
     <div class="well well-sm" v-else-if="validShow == false">
@@ -39,14 +39,14 @@ export default {
       show: {},
       validShow: false,
       showResult: '',
-      summaryReady: false,
+      fixedSummary: '',      
     }
   },
   methods: {
     searchShow: async function() {
       // eslint-disable-next-line no-undef
-      var url = 'https://parseapi.back4app.com/classes/newTitles'
-      //var url = 'https://parseapi.back4app.com/classes/newTitles?' + $.param({ where: { name: this.showName } })
+      // var url = 'https://parseapi.back4app.com/classes/newTitles'
+      var url = 'https://parseapi.back4app.com/classes/newTitles?' + $.param({ where: { name: this.showName } })
 
       const response = await fetch(url, {
         headers: {
@@ -61,7 +61,6 @@ export default {
         this.show = data.results[0]
         console.log(data.results)
         // i love csv
-        this.show.summary = this.show.summary.replace(/╘/g, ',')
         this.showResult = this.show.name
         this.validShow = true
       } catch {
@@ -72,7 +71,9 @@ export default {
     addShow: async function() {
       // first check if entry is already in the deeb
       // eslint-disable-next-line no-undef
-      var check_url = 'https://parseapi.back4app.com/classes/Watched?' + $.param({ where: { anid: this.show.anid } })
+      var check_url = 'https://parseapi.back4app.com/classes/newWatched?' + $.param({ where: { 
+        anid: this.show.anid
+      } })
       const response = await fetch(check_url, {
         headers: {
           'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
@@ -87,12 +88,17 @@ export default {
       if (!data.results[0]) {
         console.log(`going to add show ${this.show.name} to the watch list`)
 
-        var add_url = 'https://parseapi.back4app.com/classes/Watched'
+        var add_url = 'https://parseapi.back4app.com/classes/newWatched'
 
         var newShow = {
           anid: this.show.anid,
           name: this.show.name,
           status: 'started',
+          summary: this.show.summary,
+          img: this.show.img,
+          watchedEps: "0",
+          totalEps: this.show.eps,
+          type: this.show.type,
         }
 
         await fetch(add_url, {
@@ -105,6 +111,7 @@ export default {
           body: JSON.stringify(newShow),
         })
       } else {
+        // TODO add alert
         console.log(`${this.show.name} is already in the watchlist!`)
       }
     },

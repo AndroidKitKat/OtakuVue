@@ -13,7 +13,7 @@
           <div class="row no-gutters">
             <div class="pl-1">
               <img
-                src="https://cdn.animenewsnetwork.com/thumbnails/fit200x200/encyc/A7222-236.jpg"
+                :src="show.img"
                 class="card-img anime-art"
                 alt=""
               />
@@ -21,10 +21,9 @@
             <div class="col-sm">
               <div class="card-body">
                 <h5 class="card-title">{{ show.name }}</h5>
-                <p class="card-text">
-                  We should limit this card-text to around 180 chars. But what if we add more? I think it'd be a good
-                  idea to maybe put an arrow by the show name when you hover.
-                </p>
+                <!-- TODO: FIX SPACING -->
+                <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
+                <button class="btn btn-danger" @click="removeShow(show.objectId)">Remove</button>
               </div>
             </div>
           </div>
@@ -55,7 +54,7 @@ export default {
     // get the db info
     queryDb: async function() {
       // actually get the db here
-      var parseUrl = 'https://parseapi.back4app.com/classes/Watched'
+      var parseUrl = 'https://parseapi.back4app.com/classes/newWatched'
 
       const response = await fetch(parseUrl, {
         method: 'GET',
@@ -68,6 +67,25 @@ export default {
       const shows = await response.json()
       this.watched = shows.results
       this.loading = false
+    },
+    // remove show from list
+    removeShow: function(delObjectId) {
+      console.log(`removing object id: ${delObjectId}`)
+      var url = 'https://parseapi.back4app.com/classes/newWatched/' + delObjectId
+
+      fetch(url, {
+        headers: {
+          'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
+          'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
+        },
+        method: 'DELETE',
+      })
+
+
+    // https://stackoverflow.com/questions/16491758/remove-objects-from-array-by-object-property
+    this.watched.splice(this.watched.findIndex(function(show){
+      return show.objectId === delObjectId;
+    }), 1);
     },
   },
   computed: {},
