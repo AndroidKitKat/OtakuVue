@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 <template>
   <div id="AddService">
     <h2 class="text-center my-3">Add show</h2>
@@ -39,7 +41,7 @@ export default {
       show: {},
       validShow: false,
       showResult: '',
-      fixedSummary: '',      
+      fixedSummary: '',
     }
   },
   methods: {
@@ -71,9 +73,13 @@ export default {
     addShow: async function() {
       // first check if entry is already in the deeb
       // eslint-disable-next-line no-undef
-      var check_url = 'https://parseapi.back4app.com/classes/newWatched?' + $.param({ where: { 
-        anid: this.show.anid
-      } })
+      var check_url =
+        'https://parseapi.back4app.com/classes/newWatched?' +
+        $.param({
+          where: {
+            anid: this.show.anid,
+          },
+        })
       const response = await fetch(check_url, {
         headers: {
           'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
@@ -96,7 +102,7 @@ export default {
           status: 'started',
           summary: this.show.summary,
           img: this.show.img,
-          watchedEps: "0",
+          watchedEps: '0',
           totalEps: this.show.eps,
           type: this.show.type,
         }

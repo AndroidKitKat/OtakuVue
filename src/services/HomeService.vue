@@ -12,11 +12,7 @@
         >
           <div class="row no-gutters">
             <div class="pl-1">
-              <img
-                :src="show.img"
-                class="card-img anime-art"
-                alt=""
-              />
+              <img :src="show.img" class="card-img anime-art" alt="" />
             </div>
             <div class="col-sm">
               <div class="card-body">
@@ -81,11 +77,13 @@ export default {
         method: 'DELETE',
       })
 
-
-    // https://stackoverflow.com/questions/16491758/remove-objects-from-array-by-object-property
-    this.watched.splice(this.watched.findIndex(function(show){
-      return show.objectId === delObjectId;
-    }), 1);
+      // https://stackoverflow.com/questions/16491758/remove-objects-from-array-by-object-property
+      this.watched.splice(
+        this.watched.findIndex(function(show) {
+          return show.objectId === delObjectId
+        }),
+        1
+      )
     },
   },
   computed: {},
