@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 <template>
   <div id="AddService">
     <h2 class="text-center my-3">Add show</h2>
@@ -47,7 +45,6 @@ export default {
   methods: {
     searchShow: async function() {
       // eslint-disable-next-line no-undef
-      // var url = 'https://parseapi.back4app.com/classes/newTitles'
       var url = 'https://parseapi.back4app.com/classes/newTitles?' + $.param({ where: { name: this.showName } })
 
       const response = await fetch(url, {
@@ -72,9 +69,9 @@ export default {
     },
     addShow: async function() {
       // first check if entry is already in the deeb
-      // eslint-disable-next-line no-undef
       var check_url =
         'https://parseapi.back4app.com/classes/newWatched?' +
+        // eslint-disable-next-line no-undef
         $.param({
           where: {
             anid: this.show.anid,
