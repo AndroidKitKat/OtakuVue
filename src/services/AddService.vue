@@ -2,7 +2,9 @@
   <div id="AddService">
     <h2 class="text-center my-3">Add show</h2>
     <div id="input-container" class="col-md-4 mx-auto">
-      <div class="input-group">
+      <div class="alert alert-danger" role="alert" id="add-alert-danger" style="display: none;"></div>
+      <div class="alert alert-success" role="alert" id="add-alert-success" style="display: none;"></div>
+      <div class="input-group pb-3">
         <input
           v-model="showName"
           type="text"
@@ -57,7 +59,8 @@ export default {
   },
   methods: {
     searchShow: async function() {
-      // eslint-disable-next-line no-undef
+      $('#add-alert-success').hide()
+      $('#add-alert-danger').hide()
       var url = 'https://parseapi.back4app.com/classes/newTitles?' + $.param({ where: { name: this.showName } })
 
       const response = await fetch(url, {
@@ -71,7 +74,6 @@ export default {
       try {
         const data = await response.json()
         this.shows = data.results
-        console.log(data.results)
         // i love csv
         this.showResult = this.show.name
         this.validShow = true
@@ -81,15 +83,16 @@ export default {
       }
     },
     addShow: async function(Show) {
-      console.log(Show)
-      // check if anid is already in the database
+      //Show is an object that contains the info for the show that was just selected
+      var userId = Cookies.get('id')
       var check_url =
         'https://parseapi.back4app.com/classes/Users?' +
         $.param({
           where: {
-            anid: Show.anid,
+            objectId: userId,
           },
         })
+      // get showlist from server
       const response = await fetch(check_url, {
         headers: {
           'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
@@ -98,38 +101,36 @@ export default {
         },
         method: 'GET',
       })
-      // response.json() now contains either valid data from something in the watch list or an empty array if it isn't there
-      const data = await response.json()
-      // check if there is data
-      if (!data.results[0]) {
-        console.log(`going to add show ${Show.name} to the watch list`)
+      var userResults = await response.json()
+      var userInfo = userResults.results[0]
+      //userInfo.shows now contains an array of anids that the user has on their watch list
 
-        var add_url = 'https://parseapi.back4app.com/classes/newWatched'
-
-        var newShow = {
-          anid: Show.anid,
-          name: Show.name,
-          status: 'started',
-          summary: Show.summary,
-          img: Show.img,
-          watchedEps: '0',
-          totalEps: Show.eps,
-          type: Show.type,
-        }
-
-        await fetch(add_url, {
-          headers: {
-            'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
-            'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-          body: JSON.stringify(newShow),
-        })
-      } else {
-        // TODO add alert
-        console.log(`${Show.name} is already in the watchlist!`)
+      //checks to see if the selected anid IS in the userInfo.shows array
+      if ($.inArray(Show.anid, userInfo.shows) !== -1) {
+        $('#add-alert-danger').show()
+        $('#add-alert-danger').html('<strong>Error</strong> - Show already on watchlist!')
+        return
       }
+
+      // show was not in the list, so lets send it!
+      var updateUrl = 'https://parseapi.back4app.com/classes/Users/' + userId
+      var updatedShowList = userInfo.shows
+      updatedShowList.push(Show.anid)
+      var updateInfo = {
+        shows: updatedShowList,
+      }
+
+      await fetch(updateUrl, {
+        headers: {
+          'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
+          'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
+          'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+        body: JSON.stringify(updateInfo),
+      })
+      $('#add-alert-success').show()
+      $('#add-alert-success').html('<strong>Show added to watch list!</strong>')
     },
   },
   computed: {},

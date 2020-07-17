@@ -2,7 +2,9 @@
 import Home from '@views/Home'
 import Add from '@views/Add'
 import Login from '@views/Login'
+import Profile from '@views/Profile'
 import { templateSettings } from 'lodash'
+// import { component } from 'vue/types/umd'
 
 // Define the routes.
 export default [
@@ -23,5 +25,11 @@ export default [
     name: 'Log In',
     title: 'Log In',
     component: Login,
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    title: 'Profile',
+    component: Profile,
   },
 ]
