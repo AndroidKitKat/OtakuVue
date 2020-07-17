@@ -1,5 +1,5 @@
 <template>
-  <div id="profile">
+  <div id="Profile" class="Profile">
     <ProfileService />
   </div>
 </template>
@@ -8,7 +8,7 @@
 import ProfileService from '../services/ProfileService.vue'
 
 export default {
-  name: 'profile',
+  name: 'Profile',
   components: {
     ProfileService,
   },
@@ -30,3 +30,5 @@ export default {
   destroyed() {},
 }
 </script>
+
+<style></style>

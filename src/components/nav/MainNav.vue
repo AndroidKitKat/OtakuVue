@@ -17,21 +17,37 @@ export default {
   components: {},
   props: {},
   data() {
-    return {
-      loggedin: false,
-    }
+    return {}
   },
-  methods: {
-    determineLoginState: function(){
-      console.log(AppRoutes[1])
-      AppRoutes[1].title = 'Succ'
-      return AppRoutes[1].title
-    }
-  },
+  methods: {},
   computed: {
     menuRoutes() {
-      // Return the routes object.
-      return AppRoutes
+      // check for cookie to see if logged in and display either profile or log in appropriately
+      var cookie = Cookies.get('id')
+      //deep copy the routes
+      var newAppRoutes = JSON.parse(JSON.stringify(AppRoutes))
+      if (cookie === undefined) {
+        newAppRoutes.splice(
+          newAppRoutes.findIndex(function(route) {
+            return route.path == '/profile'
+          }),
+          1
+        )
+        newAppRoutes.splice(
+          newAppRoutes.findIndex(function(route) {
+            return route.path == '/add'
+          }),
+          1
+        )
+      } else {
+        newAppRoutes.splice(
+          newAppRoutes.findIndex(function(route) {
+            return route.path == '/login'
+          }),
+          1
+        )
+      }
+      return newAppRoutes
     },
   },
   watch: {},

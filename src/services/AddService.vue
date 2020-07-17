@@ -132,6 +132,14 @@ export default {
       $('#add-alert-success').show()
       $('#add-alert-success').html('<strong>Show added to watch list!</strong>')
     },
+    checkLogin: function() {
+      var userId = Cookies.get('id')
+      if (userId == undefined) {
+        console.log('no id found')
+      } else if (userId !== undefined) {
+        console.log(`user id: ${userId}`)
+      }
+    },
   },
   computed: {},
   watch: {},

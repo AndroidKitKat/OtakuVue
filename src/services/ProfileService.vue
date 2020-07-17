@@ -1,22 +1,35 @@
 <template>
-  <div id="ProfileService"></div>
+  <div id="ProfileService" class="col-md-4 mx-auto">
+    succ
+  </div>
 </template>
 
 <script>
-
+/* eslint-disable no-undef */
 export default {
-  name: 'profile',
+  name: 'Profile',
   components: {},
   props: {},
   data() {
     return {}
   },
-  methods: {},
+  methods: {
+    checkLogin: function() {
+      var userId = Cookies.get('id')
+      if (userId == undefined) {
+        console.log('no id found')
+      } else if (userId !== undefined) {
+        console.log(`user id: ${userId}`)
+      }
+    },
+  },
   computed: {},
   watch: {},
   // Lifecycle Hooks
   beforeCreate() {},
-  created() {},
+  created() {
+    this.checkLogin()
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
