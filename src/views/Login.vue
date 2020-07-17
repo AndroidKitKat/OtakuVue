@@ -1,16 +1,16 @@
 <template>
-  <div id="home" class="home">
-    <TestingService />
+  <div id="login" class="login">
+    <LoginService />
   </div>
 </template>
 
 <script>
-import TestingService from '../services/TestingService.vue'
+import LoginService from '../services/LoginService.vue'
 
 export default {
-  name: 'testing',
+  name: 'login',
   components: {
-    TestingService,
+    LoginService,
   },
   props: {},
   data() {

@@ -16,18 +16,31 @@
         </div>
       </div>
     </div>
-    <div class="card bg-light card-body mb-3 card bg-faded p-1 mb-3" v-if="validShow">
-      <a class="ani-name" :href="ann_url + show.anid" target="_blank">{{ show.name }}</a>
-      <p>{{ show.summary.replace(/╘/g, ',') }}</p>
-      <button type="button" class="btn btn-info" @click="addShow">Add</button>
-    </div>
-    <div class="well well-sm" v-else-if="validShow == false">
-      Input a valid show name!
+    <div id="search-results" class="col-md-8 mx-auto">
+      <div class="card mb-2" v-for="show in shows" :key="show.gid" style="height:210px; justify-content: center;">
+        <div class="row no-gutters">
+          <div class="pl-1 my-auto">
+            <img :src="show.img" class="card-img anime-art" alt="" />
+          </div>
+          <div class="col-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{ show.name }}</h5>
+              <!-- TODO: FIX SPACING -->
+              <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
+              <div class="row pl-3">
+                <!-- <button class="btn btn-success mr-1">Finish</button> -->
+                <button class="btn btn-primary mr-1" @click="addShow(show)">Add Show</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+// eslint-disable no-undef
 export default {
   name: 'addService',
   components: {},
@@ -36,7 +49,7 @@ export default {
     return {
       showName: '',
       ann_url: 'https://www.animenewsnetwork.com/encyclopedia/anime.php?id=',
-      show: {},
+      shows: [],
       validShow: false,
       showResult: '',
       fixedSummary: '',
@@ -57,7 +70,7 @@ export default {
       })
       try {
         const data = await response.json()
-        this.show = data.results[0]
+        this.shows = data.results
         console.log(data.results)
         // i love csv
         this.showResult = this.show.name
@@ -67,14 +80,14 @@ export default {
         this.validShow = false
       }
     },
-    addShow: async function() {
-      // first check if entry is already in the deeb
+    addShow: async function(Show) {
+      console.log(Show)
+      // check if anid is already in the database
       var check_url =
-        'https://parseapi.back4app.com/classes/newWatched?' +
-        // eslint-disable-next-line no-undef
+        'https://parseapi.back4app.com/classes/Users?' +
         $.param({
           where: {
-            anid: this.show.anid,
+            anid: Show.anid,
           },
         })
       const response = await fetch(check_url, {
@@ -89,19 +102,19 @@ export default {
       const data = await response.json()
       // check if there is data
       if (!data.results[0]) {
-        console.log(`going to add show ${this.show.name} to the watch list`)
+        console.log(`going to add show ${Show.name} to the watch list`)
 
         var add_url = 'https://parseapi.back4app.com/classes/newWatched'
 
         var newShow = {
-          anid: this.show.anid,
-          name: this.show.name,
+          anid: Show.anid,
+          name: Show.name,
           status: 'started',
-          summary: this.show.summary,
-          img: this.show.img,
+          summary: Show.summary,
+          img: Show.img,
           watchedEps: '0',
-          totalEps: this.show.eps,
-          type: this.show.type,
+          totalEps: Show.eps,
+          type: Show.type,
         }
 
         await fetch(add_url, {
@@ -115,7 +128,7 @@ export default {
         })
       } else {
         // TODO add alert
-        console.log(`${this.show.name} is already in the watchlist!`)
+        console.log(`${Show.name} is already in the watchlist!`)
       }
     },
   },

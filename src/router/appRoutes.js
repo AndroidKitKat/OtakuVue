@@ -1,7 +1,7 @@
 // Import the views for the routes.
 import Home from '@views/Home'
 import Add from '@views/Add'
-import Testing from '@views/Testing'
+import Login from '@views/Login'
 import { templateSettings } from 'lodash'
 
 // Define the routes.
@@ -19,9 +19,9 @@ export default [
     component: Add,
   },
   {
-    path: '/testing',
-    name: 'testing',
-    title: 'testing',
-    component: Testing,
+    path: '/login',
+    name: 'Log In',
+    title: 'Log In',
+    component: Login,
   },
 ]

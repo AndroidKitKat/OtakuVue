@@ -17,9 +17,17 @@ export default {
   components: {},
   props: {},
   data() {
-    return {}
+    return {
+      loggedin: false,
+    }
   },
-  methods: {},
+  methods: {
+    determineLoginState: function(){
+      console.log(AppRoutes[1])
+      AppRoutes[1].title = 'Succ'
+      return AppRoutes[1].title
+    }
+  },
   computed: {
     menuRoutes() {
       // Return the routes object.

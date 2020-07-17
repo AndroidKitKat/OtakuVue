@@ -7,11 +7,11 @@
           class="card mb-2"
           style="height:210px; justify-content: center;"
           v-for="show in watched"
-          :key="show.name"
-          :data-id="show.gid"
+          :key="show.gid"
+          :data-id="show.anid"
         >
           <div class="row no-gutters">
-            <div class="pl-1">
+            <div class="pl-1 my-auto">
               <img :src="show.img" class="card-img anime-art" alt="" />
             </div>
             <div class="col-sm">
@@ -19,7 +19,10 @@
                 <h5 class="card-title">{{ show.name }}</h5>
                 <!-- TODO: FIX SPACING -->
                 <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
-                <button class="btn btn-danger" @click="removeShow(show.objectId)">Remove</button>
+                <div class="row pl-3">
+                  <!-- <button class="btn btn-success mr-1">Finish</button> -->
+                  <button class="btn btn-danger mr-1" @click="removeShow(show.objectId)">Drop Show</button>
+                </div>
               </div>
             </div>
           </div>
