@@ -1,38 +1,44 @@
 <template>
   <div id="HomeService">
     <h1 class="text-center my-3">Shows on Watchlist</h1>
-    <div id="shows-container" v-if="watched.length > 0 && !loading">
-      <div class="col-md-8 mx-auto">
-        <div
-          class="card mb-2"
-          style="height:210px; justify-content: center;"
-          v-for="show in watched"
-          :key="show.gid"
-          :data-id="show.anid"
-        >
-          <div class="row no-gutters">
-            <div class="pl-1 my-auto">
-              <img :src="show.img" class="card-img anime-art" alt="" />
-            </div>
-            <div class="col-sm">
-              <div class="card-body">
-                <h5 class="card-title">{{ show.name }}</h5>
-                <!-- TODO: FIX SPACING -->
-                <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
-                <div class="row pl-3">
-                  <!-- <button class="btn btn-success mr-1">Finish</button> -->
-                  <button class="btn btn-danger mr-1" @click="removeShow(show.anid)">Drop Show</button>
+    <div id="has-cookie-div" v-if="hasCookie">
+      <div id="shows-container" v-if="watched.length > 0 && !loading">
+        <div class="col-md-8 mx-auto">
+          <div
+            class="card mb-2"
+            style="height:210px; justify-content: center;"
+            v-for="show in watched"
+            :key="show.gid"
+            :data-id="show.anid"
+          >
+            <div class="row no-gutters">
+              <div class="pl-1 my-auto">
+                <img :src="show.img" class="card-img anime-art" alt="" />
+              </div>
+              <div class="col-sm">
+                <div class="card-body">
+                  <h5 class="card-title">{{ show.name }}</h5>
+                  <!-- TODO: FIX SPACING -->
+                  <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
+                  <div class="row pl-3">
+                    <!-- <button class="btn btn-success mr-1">Finish</button> -->
+                    <button class="btn btn-danger mr-1" @click="removeShow(show.anid)">Drop Show</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="d-flex justify-content-center" v-if="loading">
-      <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+      <div class="d-flex justify-content-center" v-if="loading">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
       </div>
+    </div>
+    <div id="hasnt-cookie-div" v-if="!hasCookie">
+      <h3 class="text-center">You're not logged in!</h3>
+      <h4 class="text-center">Log in to add shows to the watchlist.</h4>
     </div>
   </div>
 </template>
@@ -48,11 +54,16 @@ export default {
       watched: [],
       ann_url: 'https://www.animenewsnetwork.com/encyclopedia/anime.php?id=',
       loading: true,
+      hasCookie: false,
     }
   },
   methods: {
     // get the db info
     queryDb: async function() {
+      // bail if cookie isn't set
+      if (!this.hasCookie) {
+        return
+      }
       // pull in the user's show list
       var userId = Cookies.get('id')
 
@@ -156,12 +167,21 @@ export default {
         1
       )
     },
+    checkLogin: function() {
+      var cookie = Cookies.get('id')
+      // dont show anything to users who aren't logged in!
+      if (cookie !== undefined) {
+        this.hasCookie = true
+      }
+    },
   },
   computed: {},
   watch: {},
   // Lifecycle Hooks
   beforeCreate() {},
-  created() {},
+  created() {
+    this.checkLogin()
+  },
   beforeMount() {
     this.queryDb()
   },
