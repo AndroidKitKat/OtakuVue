@@ -26,6 +26,7 @@ export default {
       var cookie = Cookies.get('id')
       //deep copy the routes
       var newAppRoutes = JSON.parse(JSON.stringify(AppRoutes))
+      // if user is NOT logged in
       if (cookie === undefined) {
         newAppRoutes.splice(
           newAppRoutes.findIndex(function(route) {
@@ -39,7 +40,7 @@ export default {
           }),
           1
         )
-      } else {
+      } else { //IF USER IS LOGGED IN
         newAppRoutes.splice(
           newAppRoutes.findIndex(function(route) {
             return route.path == '/login'

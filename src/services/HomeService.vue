@@ -21,7 +21,7 @@
                 <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
                 <div class="row pl-3">
                   <!-- <button class="btn btn-success mr-1">Finish</button> -->
-                  <button class="btn btn-danger mr-1" @click="removeShow(show.objectId)">Drop Show</button>
+                  <button class="btn btn-danger mr-1" @click="removeShow(show.anid)">Drop Show</button>
                 </div>
               </div>
             </div>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+/* eslint-disable no-undef */
 export default {
   name: 'homeService',
   components: {},
@@ -52,10 +53,18 @@ export default {
   methods: {
     // get the db info
     queryDb: async function() {
-      // actually get the db here
-      var parseUrl = 'https://parseapi.back4app.com/classes/newWatched'
+      // pull in the user's show list
+      var userId = Cookies.get('id')
 
-      const response = await fetch(parseUrl, {
+      var userAnidsListUrl =
+        'https://parseapi.back4app.com/classes/Users?' +
+        $.param({
+          where: {
+            objectId: userId,
+          },
+        })
+
+      const userAnidListResponse = await fetch(userAnidsListUrl, {
         method: 'GET',
         headers: {
           'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
@@ -63,27 +72,86 @@ export default {
           'Content-Type': 'application/json',
         },
       })
-      const shows = await response.json()
-      this.watched = shows.results
+      const userAnidListData = await userAnidListResponse.json()
+      // grab the anids from the showlist
+      var userAnids = userAnidListData.results[0].shows
+      // now turn those Anids into the show objects
+
+      // query the db for each show in the database, i guess...
+      // I THINK THIS IS ACTUALLY VERY SLOW WHEN IT GETS BIGGER
+      // However, I think trade-off is worth it, since we want users to see the
+      // show they JUST added to the top
+      var userShows = []
+      for (var i = 0; i < userAnids.length; i++) {
+        var userShowUrl =
+          'https://parseapi.back4app.com/classes/newTitles?' +
+          $.param({
+            where: {
+              anid: userAnids[i],
+            },
+          })
+        const userGetShowResponse = await fetch(userShowUrl, {
+          method: 'GET',
+          headers: {
+            'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
+            'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
+            'Content-Type': 'application/json',
+          },
+        })
+        const userGetShowData = await userGetShowResponse.json()
+        userShows.push(userGetShowData.results[0])
+      }
+      // reverse to see latest added
+      this.watched = userShows.reverse()
+
       this.loading = false
     },
     // remove show from list
-    removeShow: function(delObjectId) {
-      console.log(`removing object id: ${delObjectId}`)
-      var url = 'https://parseapi.back4app.com/classes/newWatched/' + delObjectId
-
-      fetch(url, {
+    // has to be await so we get the user object
+    removeShow: async function(delAnid) {
+      console.log(`removing anid: ${delAnid}`)
+      // need user id and get userObject from Db
+      var userId = Cookies.get('id')
+      var check_url =
+        'https://parseapi.back4app.com/classes/Users?' +
+        $.param({
+          where: {
+            objectId: userId,
+          },
+        })
+      const response = await fetch(check_url, {
         headers: {
           'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
           'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
+          'Content-Type': 'application/json',
         },
-        method: 'DELETE',
+        method: 'GET',
       })
+      var userResults = await response.json()
+      var userInfo = userResults.results[0]
+      // work with a deep copy of the user object just in case
+      var userInfoCopy = JSON.parse(JSON.stringify(userInfo))
+      // remove show from list
+      userInfoCopy.shows.splice(userInfoCopy.shows.indexOf(delAnid), 1)
 
-      // https://stackoverflow.com/questions/16491758/remove-objects-from-array-by-object-property
+      // off to remove that pesky show
+      // doesn't need to be await since we just need to yeet
+      var updateUrl = 'https://parseapi.back4app.com/classes/Users/' + userInfo.objectId
+      var updatedShowList = {
+        shows: userInfoCopy.shows,
+      }
+      fetch(updateUrl, {
+        headers: {
+          'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
+          'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
+          'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+        body: JSON.stringify(updatedShowList),
+      })
       this.watched.splice(
         this.watched.findIndex(function(show) {
-          return show.objectId === delObjectId
+          return show.anid === delAnid
         }),
         1
       )
