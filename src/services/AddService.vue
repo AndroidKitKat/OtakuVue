@@ -1,6 +1,6 @@
 <template>
-  <div id="AddService">
-    <h2 class="text-center my-3">Add show</h2>
+  <div id="AddService" v-if="hasCookie">
+    <h1 class="text-center my-3">Add show</h1>
     <div id="input-container" class="col-md-4 mx-auto">
       <div class="alert alert-danger" role="alert" id="add-alert-danger" style="display: none;"></div>
       <div class="alert alert-success" role="alert" id="add-alert-success" style="display: none;"></div>
@@ -14,7 +14,7 @@
           aria-describedby="show-input"
         />
         <div class="input-group-append">
-          <button class="btn btn-outline-primary" type="button" @click="searchShow">Search</button>
+          <button class="btn btn-primary" type="button" @click="searchShow">Search</button>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-// eslint-disable no-undef
+/* eslint-disable no-undef */
 export default {
   name: 'addService',
   components: {},
@@ -55,6 +55,7 @@ export default {
       validShow: false,
       showResult: '',
       fixedSummary: '',
+      hasCookie: false,
     }
   },
   methods: {
@@ -133,11 +134,12 @@ export default {
       $('#add-alert-success').html('<strong>Show added to watch list!</strong>')
     },
     checkLogin: function() {
-      var userId = Cookies.get('id')
-      if (userId == undefined) {
-        console.log('no id found')
-      } else if (userId !== undefined) {
-        console.log(`user id: ${userId}`)
+      var cookie = Cookies.get('id')
+      // redirect users who aren't logged in
+      if (cookie == undefined) {
+        $(location).attr('href', '/')
+      } else {
+        this.hasCookie = true
       }
     },
   },
@@ -145,7 +147,9 @@ export default {
   watch: {},
   // Lifecycle Hooks
   beforeCreate() {},
-  created() {},
+  created() {
+    this.checkLogin()
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},

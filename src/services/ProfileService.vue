@@ -15,11 +15,12 @@ export default {
   },
   methods: {
     checkLogin: function() {
-      var userId = Cookies.get('id')
-      if (userId == undefined) {
-        console.log('no id found')
-      } else if (userId !== undefined) {
-        console.log(`user id: ${userId}`)
+      var cookie = Cookies.get('id')
+      // redirect users who aren't logged in
+      if (cookie == undefined) {
+        $(location).attr('href', '/')
+      } else {
+        this.hasCookie = true
       }
     },
   },
