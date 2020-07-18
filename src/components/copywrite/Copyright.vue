@@ -11,12 +11,12 @@
           <br />
           &#xA9;
           {{ currentYear() }} <a href="https://github.com/AndroidKitKat">AndroidKitKat</a> and
-          <a href="https://github.com/ogallahu">ogallahu</a>.
+          <a href="https://github.com/ogallahu">ogallahu</a>. Open source on
+          <a href="https://github.com/AndroidKitKat/OtakuVue">GitHub</a>!
         </small>
       </p>
     </footer>
   </div>
-  <!-- <div id="copyright" class="copyright">{{ siteName() }} &copy; {{ currentYear() }}</div> -->
 </template>
 
 <script>
