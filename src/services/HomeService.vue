@@ -30,6 +30,9 @@
           </div>
         </div>
       </div>
+      <div class="text-center" v-if="watched.length == 0">
+        <h4>You have nothing on your watchlist.</h4>
+      </div>
       <div class="d-flex justify-content-center" v-if="loading">
         <div class="spinner-border" role="status">
           <span class="sr-only">Loading...</span>
