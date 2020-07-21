@@ -87,34 +87,11 @@ export default {
         },
       })
       const userAnidListData = await userAnidListResponse.json()
-      // grab the anids from the showlist
-      var userAnids = userAnidListData.results[0].shows
-      // now turn those Anids into the show objects
+      // grab the SHOWS LIST (THESE ARE JSON Objects effectively)
+      var userShows = userAnidListData.results[0].shows
+      // no more need to fetch the database every freaking time...
+      console.log(userShows)
 
-      // query the db for each show in the database, i guess...
-      // I THINK THIS IS ACTUALLY VERY SLOW WHEN IT GETS BIGGER
-      // However, I think trade-off is worth it, since we want users to see the
-      // show they JUST added to the top
-      var userShows = []
-      for (var i = 0; i < userAnids.length; i++) {
-        var userShowUrl =
-          'https://parseapi.back4app.com/classes/newTitles?' +
-          $.param({
-            where: {
-              anid: userAnids[i],
-            },
-          })
-        const userGetShowResponse = await fetch(userShowUrl, {
-          method: 'GET',
-          headers: {
-            'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
-            'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
-            'Content-Type': 'application/json',
-          },
-        })
-        const userGetShowData = await userGetShowResponse.json()
-        userShows.push(userGetShowData.results[0])
-      }
       // reverse to see latest added
       this.watched = userShows.reverse()
 
