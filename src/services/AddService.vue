@@ -104,23 +104,30 @@ export default {
       })
       var userResults = await response.json()
       var userInfo = userResults.results[0]
-      //userInfo.shows now contains an array of anids that the user has on their watch list
+      //userInfo.shows now contains an array of OBJECTS that the user has on their watch list
+      console.log(userInfo.shows)
+      // rework array check for object check
+      // now, look through userInfo.shows as our array, but we need to check
 
-      //checks to see if the selected anid IS in the userInfo.shows array
-      if ($.inArray(Show.anid, userInfo.shows) !== -1) {
-        $('#add-alert-danger').show()
-        $('#add-alert-danger').html('<strong>Error</strong> - Show already on watchlist!')
-        return
+      for (var i = 0; i < userInfo.shows.length; i++) {
+        if (Show.anid == userInfo.shows[i].anid) {
+          $('#add-alert-danger').show()
+          $('#add-alert-danger').html('<strong>Error</strong> - Show already on watchlist!')
+          return
+        }
       }
+      //checks to see if the selected anid IS in the userInfo.shows array
 
       // show was not in the list, so lets send it!
       var updateUrl = 'https://parseapi.back4app.com/classes/Users/' + userId
+
       var updatedShowList = userInfo.shows
-      updatedShowList.push(Show.anid)
+      updatedShowList.push(Show)
       var updateInfo = {
         shows: updatedShowList,
       }
 
+      // send the stuff
       await fetch(updateUrl, {
         headers: {
           'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
