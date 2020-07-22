@@ -3,6 +3,9 @@
     <h1 class="text-center my-3">Shows on Watchlist</h1>
     <div id="has-cookie-div" v-if="hasCookie">
       <div id="shows-container" v-if="watched.length > 0 && !loading">
+        <div id="nav-container" class="m-1 text-center">
+          <p>test</p>
+        </div>
         <div class="col-md-8 mx-auto">
           <div
             class="card mb-2"
@@ -12,7 +15,7 @@
             :data-id="show.anid"
           >
             <div class="row no-gutters">
-              <div class="pl-1 my-auto">
+              <div class="pl-1 my-auto" style="width: 200px;">
                 <img :src="show.img" class="card-img anime-art" alt="" />
               </div>
               <div class="col-sm">
@@ -21,11 +24,7 @@
                   <!-- TODO: FIX SPACING -->
                   <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
                   <div class="row no-gutters">
-                    <!-- <button class="btn btn-success mr-1">Finish</button> -->
                     <button class="btn btn-danger mr-1" @click="removeShow(show.anid)">Drop Show</button>
-                  </div>
-                  <div class="row no-gutters mt-2">
-                    <small class="text-muted">You're the only one watching this</small>
                   </div>
                 </div>
               </div>
@@ -107,7 +106,7 @@ export default {
         headers: {
           'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
           'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         method: 'GET',
       })
