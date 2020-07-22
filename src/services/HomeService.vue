@@ -1,39 +1,62 @@
 <template>
   <div id="HomeService">
-    <h1 class="text-center my-3">Shows on Watchlist</h1>
+    <h1 class="text-center my-3">Watchlist</h1>
     <div id="has-cookie-div" v-if="hasCookie">
-      <div id="shows-container" v-if="watched.length > 0 && !loading">
-        <div id="nav-container" class="m-1 text-center">
-          <p>test</p>
-        </div>
-        <div class="col-md-8 mx-auto">
-          <div
-            class="card mb-2"
-            style="height:210px; justify-content: center;"
-            v-for="show in watched"
-            :key="show.gid"
-            :data-id="show.anid"
-          >
-            <div class="row no-gutters">
-              <div class="pl-1 my-auto" style="width: 200px;">
-                <img :src="show.img" class="card-img anime-art" alt="" />
-              </div>
-              <div class="col-sm">
-                <div class="card-body pl-3">
-                  <h5 class="card-title">{{ show.name }}</h5>
-                  <!-- TODO: FIX SPACING -->
-                  <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
-                  <div class="row no-gutters">
-                    <button class="btn btn-danger mr-1" @click="removeShow(show.anid)">Drop Show</button>
+      <div id="nav-container" class="m-2 text-center">
+        <ul class="nav nav-tabs justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link active" id="my-list" @click="changeActiveTab('mine')" href="#">My Shows</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="others-list" @click="changeActiveTab('else')" href="#">What others are watching</a>
+          </li>
+        </ul>
+      </div>
+      <div id="entire-shows-container" v-if="!loading">
+        <div id="my-shows-container" style="display: block;">
+          <div class="col-md-8 mx-auto">
+            <div class="card mb-2" v-for="show in watched" :key="show.gid" :data-id="show.anid">
+              <div class="row no-gutters">
+                <div class="pl-1 my-auto col-2">
+                  <img :src="show.img" class="card-img anime-art" />
+                </div>
+                <div class="col-sm">
+                  <div class="card-body pl-3">
+                    <h5 class="card-title">{{ show.name }}</h5>
+                    <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
+                    <div class="row no-gutters">
+                      <button class="btn btn-danger mr-1" @click="removeShow(show)">Drop Show</button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="text-center" v-if="watched.length == 0">
+            <h4>You have nothing on your watchlist.</h4>
+          </div>
         </div>
-      </div>
-      <div class="text-center" v-if="watched.length == 0">
-        <h4>You have nothing on your watchlist.</h4>
+        <div id="others-shows-container" style="display: none;">
+          <div class="col-md-8 mx-auto">
+            <div class="card mb-2" v-for="show in globalWatched" :key="show.gid" :data-id="show.anid">
+              <div class="row no-gutters">
+                <div class="pl-1 my-auto col-2">
+                  <img :src="show.img" class="card-img anime-art" />
+                </div>
+                <div class="col-sm">
+                  <div class="card-body pl-3">
+                    <h5 class="card-title">{{ show.name }}</h5>
+                    <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
+                    <p class="text-muted">Watched by x, y, z</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center" v-if="globalWatched.length == 0">
+            <h4>Apparently no one else is watching anything...</h4>
+          </div>
+        </div>
       </div>
       <div class="d-flex justify-content-center" v-if="loading">
         <div class="spinner-border" role="status">
@@ -60,6 +83,10 @@ export default {
       ann_url: 'https://www.animenewsnetwork.com/encyclopedia/anime.php?id=',
       loading: true,
       hasCookie: false,
+      globalWatched: [],
+      // store the user info just because
+      userInfo: {},
+      activeTab: 'mine',
     }
   },
   methods: {
@@ -90,9 +117,11 @@ export default {
       })
       const userAnidListData = await userAnidListResponse.json()
       // grab the SHOWS LIST (THESE ARE JSON Objects effectively)
+      this.userInfo = userAnidListData.results[0]
       var userShows = userAnidListData.results[0].shows
+
       // no more need to fetch the database every freaking time...
-      console.log(userShows)
+      // console.log(userShows)
 
       // reverse to see latest added
       this.watched = userShows.reverse()
@@ -114,37 +143,18 @@ export default {
     },
     // remove show from list
     // has to be await so we get the user object
-    removeShow: async function(delAnid) {
-      console.log(`removing anid: ${delAnid}`)
-      // need user id and get userObject from Db
-      var userId = Cookies.get('id')
-      var check_url =
-        'https://parseapi.back4app.com/classes/Users?' +
-        $.param({
-          where: {
-            objectId: userId,
-          },
-        })
-      const response = await fetch(check_url, {
-        headers: {
-          'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
-          'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
-          'Content-Type': 'application/json',
-        },
-        method: 'GET',
-      })
-      var userResults = await response.json()
-      var userInfo = userResults.results[0]
-      // work with a deep copy of the user object just in case
-      var userInfoCopy = JSON.parse(JSON.stringify(userInfo))
-      // remove show from list
-      userInfoCopy.shows.splice(userInfoCopy.shows.indexOf(delAnid), 1)
-
-      // off to remove that pesky show
-      // doesn't need to be await since we just need to yeet
-      var updateUrl = 'https://parseapi.back4app.com/classes/Users/' + userInfo.objectId
+    removeShow: async function(Show) {
+      this.userInfo.shows.splice(
+        this.userInfo.shows.findIndex(function(show) {
+          return show.anid === Show.anid
+        }),
+        1
+      )
+      // // off to remove that pesky show
+      // // doesn't need to be await since we just need to yeet
+      var updateUrl = 'https://parseapi.back4app.com/classes/Users/' + this.userInfo.objectId
       var updatedShowList = {
-        shows: userInfoCopy.shows,
+        shows: this.userInfo.shows,
       }
       fetch(updateUrl, {
         headers: {
@@ -155,18 +165,36 @@ export default {
         method: 'PUT',
         body: JSON.stringify(updatedShowList),
       })
-      this.watched.splice(
-        this.watched.findIndex(function(show) {
-          return show.anid === delAnid
-        }),
-        1
-      )
     },
     checkLogin: function() {
       var cookie = Cookies.get('id')
       // dont show anything to users who aren't logged in!
       if (cookie !== undefined) {
         this.hasCookie = true
+      }
+    },
+    changeActiveTab: function(clickedTab) {
+      // determine active tab
+      var activeTab = ''
+      if ($('#my-list').attr('class') === 'nav-link active') {
+        activeTab = 'mine'
+      } else {
+        activeTab = 'else'
+      }
+      // see if the activeTab is not the clicked tab
+      if (activeTab !== clickedTab) {
+        // change the active tab
+        if (clickedTab === 'mine') {
+          $('#my-list').attr('class', 'nav-link active')
+          $('#others-list').attr('class', 'nav-link')
+          $('#my-shows-container').show()
+          $('#others-shows-container').hide()
+        } else {
+          $('#my-list').attr('class', 'nav-link')
+          $('#others-list').attr('class', 'nav-link active')
+          $('#my-shows-container').hide()
+          $('#others-shows-container').show()
+        }
       }
     },
   },
