@@ -16,13 +16,16 @@
                 <img :src="show.img" class="card-img anime-art" alt="" />
               </div>
               <div class="col-sm">
-                <div class="card-body">
+                <div class="card-body pl-3">
                   <h5 class="card-title">{{ show.name }}</h5>
                   <!-- TODO: FIX SPACING -->
                   <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
-                  <div class="row pl-3">
+                  <div class="row no-gutters">
                     <!-- <button class="btn btn-success mr-1">Finish</button> -->
                     <button class="btn btn-danger mr-1" @click="removeShow(show.anid)">Drop Show</button>
+                  </div>
+                  <div class="row no-gutters mt-2">
+                    <small class="text-muted">You're the only one watching this</small>
                   </div>
                 </div>
               </div>
@@ -96,6 +99,19 @@ export default {
       this.watched = userShows.reverse()
 
       this.loading = false
+    },
+    getAllShows: async function() {
+      // i guess we should get everyone's show list
+      var url = 'https://parseapi.back4app.com/classes/Users'
+      const usersResponse = await fetch(url, {
+        headers: {
+          'X-Parse-Application-Id': 'SoRFZII22nVCw17Wg28IZMKbfCfnbYupOke1dx0i',
+          'X-Parse-REST-API-Key': 'P3TaBptY0NJFXpBCEwzJTtqKod1F61itSeBuUQ4P',
+          'Content-Type': 'application/json'
+        },
+        method: 'GET',
+      })
+      console.log(await usersResponse.json())
     },
     // remove show from list
     // has to be await so we get the user object
