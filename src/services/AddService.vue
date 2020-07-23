@@ -19,9 +19,9 @@
       </div>
     </div>
     <div id="search-results" class="col-md-8 mx-auto">
-      <div class="card mb-2" v-for="show in shows" :key="show.gid" style="height:210px; justify-content: center;">
+      <div class="card mb-2" v-for="show in shows" :key="show.gid">
         <div class="row no-gutters">
-          <div class="pl-1 my-auto">
+          <div class="pl-1 my-auto col-2">
             <img :src="show.img" class="card-img anime-art" alt="" />
           </div>
           <div class="col-sm">
