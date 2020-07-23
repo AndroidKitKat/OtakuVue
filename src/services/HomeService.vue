@@ -47,7 +47,7 @@
                   <div class="card-body pl-3">
                     <h5 class="card-title">{{ show.name }}</h5>
                     <p class="card-text">{{ show.summary.replace(/╘/g, ',') }}</p>
-                    <p class="text-muted">Watched by x, y, z</p>
+                    <p class="text-muted">Watched by {{ show.watchers.join(', ') }}</p>
                   </div>
                 </div>
               </div>
@@ -120,9 +120,6 @@ export default {
       this.userInfo = userAnidListData.results[0]
       var userShows = userAnidListData.results[0].shows
 
-      // no more need to fetch the database every freaking time...
-      // console.log(userShows)
-
       // reverse to see latest added
       this.watched = userShows.reverse()
 
@@ -139,7 +136,26 @@ export default {
         },
         method: 'GET',
       })
-      console.log(await usersResponse.json())
+      var globalUsersResp = await usersResponse.json()
+      var globalUsersData = globalUsersResp.results
+      var globalUserShowsObj = {}
+      for (var i = 0; i < globalUsersData.length; i++) {
+        for (var j = 0; j < globalUsersData[i].shows.length; j++) {
+          // set thing to array if it isn't
+          if (globalUserShowsObj[globalUsersData[i].shows[j].name] == undefined) {
+            globalUserShowsObj[globalUsersData[i].shows[j].name] = { watchers: [] }
+          }
+          globalUserShowsObj[globalUsersData[i].shows[j].name].watchers.push(globalUsersData[i].username)
+          // set the rest of the data
+          globalUserShowsObj[globalUsersData[i].shows[j].name]['summary'] = globalUsersData[i].shows[j].summary
+          globalUserShowsObj[globalUsersData[i].shows[j].name]['name'] = globalUsersData[i].shows[j].name
+          globalUserShowsObj[globalUsersData[i].shows[j].name]['gid'] = globalUsersData[i].shows[j].gid
+          globalUserShowsObj[globalUsersData[i].shows[j].name]['anid'] = globalUsersData[i].shows[j].anid
+          globalUserShowsObj[globalUsersData[i].shows[j].name]['img'] = globalUsersData[i].shows[j].img
+        }
+      }
+      var globalUserShowsArray = Object.values(globalUserShowsObj)
+      this.globalWatched = globalUserShowsArray
     },
     // remove show from list
     // has to be await so we get the user object
@@ -206,6 +222,7 @@ export default {
     this.checkLogin()
   },
   beforeMount() {
+    this.getAllShows()
     this.queryDb()
   },
   mounted() {},
