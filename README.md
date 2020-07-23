@@ -12,6 +12,13 @@ npm install
 npm run serve
 ```
 
+## Changed Functionality
+
+* Ability for users to create profile picture
+* Allow users to change profile picture 
+* Files Changed
+    * ProfileService.vue
+
 ### Compiles and hot-reloads for development
 
 ```javascript
