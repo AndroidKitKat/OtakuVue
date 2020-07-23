@@ -6,6 +6,7 @@
 * File(s) Changed
   * src/services/HomeService.vue
 
+This branch also has Owen's changes for the Live Demonstration.
 ---
 
 ## Project setup
