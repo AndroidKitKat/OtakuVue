@@ -17,7 +17,7 @@
       <div id="pic-file-picker" style="display: none">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span id="upload-text" @click="uploadFile" class="input-group-text">Upload</span>
+            <span id="upload-text-text" @click="uploadFile" class="input-group-text">Upload</span>
           </div>
           <div class="custom-file">
             <input type="file" class="custom-file-input" id="profile-pic-input" accept="image/*" />
@@ -93,7 +93,7 @@ export default {
 
     uploadFile: async function() {
       // switch to using jQuery to get the things
-      var upload_text = document.getElementById("upload-text")
+      var upload_text = document.getElementById("upload-text-text")
       upload_text.textContent = "Working..."
       var file_data = $('#profile-pic-input').prop('files')[0]
       var form_data = new FormData()
