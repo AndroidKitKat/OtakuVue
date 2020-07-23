@@ -1,5 +1,13 @@
 # OtakuVue
 
+## Changed Functionality for eisemann-siteWideWatchList
+
+* Added tabbed interface on Homescreen that keeps track of what other shows people are watching.
+* File(s) Changed
+  * src/services/HomeService.vue
+
+---
+
 ## Project setup
 
 ```javascript
